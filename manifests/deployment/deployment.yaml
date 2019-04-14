@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pizza-crd-webhook
+  namespace: pizza-crd
+  labels:
+    webhook: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      webhook: "true"
+  template:
+    metadata:
+      labels:
+        webhook: "true"
+    spec:
+      containers:
+      - name: webhook
+        image: quay.io/programming-kubernetes/pizza-crd:latest
+        imagePullPolicy: Always
+        command: ["/pizza-crd-webhook"]
+        args:
+        - --cert-dir=/tmp/certs
+        - --secure-port=8443
+        - --v=4

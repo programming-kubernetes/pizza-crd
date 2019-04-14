@@ -24,6 +24,7 @@ import (
 	"github.com/spf13/pflag"
 	"k8s.io/apiserver/pkg/server"
 	"k8s.io/apiserver/pkg/server/options"
+	"k8s.io/component-base/cli/globalflag"
 
 	"github.com/programming-kubernetes/pizza-crd/pkg/webhook/conversion"
 )
@@ -66,6 +67,7 @@ func main() {
 	// parse flags
 	opt := NewDefaultOptions()
 	fs := pflag.NewFlagSet("pizza-crd-webhook", pflag.ExitOnError)
+	globalflag.AddGlobalFlags(fs, "pizza-crd-webhook")
 	opt.AddFlags(fs)
 	if err := fs.Parse(os.Args); err != nil {
 		panic(err)
