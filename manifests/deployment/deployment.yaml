@@ -17,8 +17,8 @@ spec:
     spec:
       containers:
       - name: webhook
-        image: quay.io/programming-kubernetes/pizza-crd:latest
-        imagePullPolicy: Always
+        image: quay.io/programming-kubernetes/pizza-crd
+        imagePullPolicy: Never
         command: ["/pizza-crd-webhook"]
         args:
         - --cert-dir=/tmp/certs
