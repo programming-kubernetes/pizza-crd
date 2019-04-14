@@ -50,7 +50,8 @@ func Serve(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// decode body as conversion review
-	obj, gvk, err := codecs.UniversalDeserializer().Decode(body, nil, nil)
+	reviewGVK := apiextensionsv1beta1.SchemeGroupVersion.WithKind("ConversionReview")
+	obj, gvk, err := codecs.UniversalDeserializer().Decode(body, &reviewGVK, &apiextensionsv1beta1.ConversionReview{})
 	if err != nil {
 		responsewriters.InternalError(w, req, fmt.Errorf("failed to decode body: %v", err))
 		return
@@ -105,5 +106,5 @@ func Serve(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// write negotiated response
-	responsewriters.WriteObject(http.StatusOK, gvk.GroupVersion(), codecs, obj, w, req)
+	responsewriters.WriteObject(http.StatusOK, gvk.GroupVersion(), codecs, review, w, req)
 }

@@ -20,17 +20,19 @@ import (
 	"fmt"
 
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/klog"
 
 	"github.com/programming-kubernetes/pizza-crd/pkg/apis/restaurant/v1alpha1"
 	"github.com/programming-kubernetes/pizza-crd/pkg/apis/restaurant/v1beta1"
 )
 
-func convert(obj runtime.Object, apiVersion string) (runtime.Object, error) {
-	switch in := obj.(type) {
+func convert(in runtime.Object, apiVersion string) (runtime.Object, error) {
+	switch in := in.(type) {
 	case *v1alpha1.Pizza:
 		if apiVersion != v1beta1.SchemeGroupVersion.String() {
 			return nil, fmt.Errorf("cannot convert %s to %s", v1alpha1.SchemeGroupVersion, apiVersion)
 		}
+		klog.V(2).Infof("Converting %s/%s from %s to %s", in.Namespace, in.Name, v1alpha1.SchemeGroupVersion, apiVersion)
 
 		out := &v1beta1.Pizza{
 			TypeMeta: in.TypeMeta,
@@ -39,6 +41,7 @@ func convert(obj runtime.Object, apiVersion string) (runtime.Object, error) {
 				Cost: in.Status.Cost,
 			},
 		}
+		out.TypeMeta.APIVersion = apiVersion
 
 		idx := map[string]int{}
 		for _, top := range in.Spec.Toppings {
@@ -59,6 +62,7 @@ func convert(obj runtime.Object, apiVersion string) (runtime.Object, error) {
 		if apiVersion != v1beta1.SchemeGroupVersion.String() {
 			return nil, fmt.Errorf("cannot convert %s to %s", v1beta1.SchemeGroupVersion, apiVersion)
 		}
+		klog.V(2).Infof("Converting %s/%s from %s to %s", in.Namespace, in.Name, v1alpha1.SchemeGroupVersion, apiVersion)
 
 		out := &v1alpha1.Pizza{
 			TypeMeta: in.TypeMeta,
@@ -67,6 +71,7 @@ func convert(obj runtime.Object, apiVersion string) (runtime.Object, error) {
 				Cost: in.Status.Cost,
 			},
 		}
+		out.TypeMeta.APIVersion = apiVersion
 
 		for i := range in.Spec.Toppings {
 			for j := 0; j < in.Spec.Toppings[i].Quantity; j++ {
@@ -78,5 +83,6 @@ func convert(obj runtime.Object, apiVersion string) (runtime.Object, error) {
 
 	default:
 	}
-	return nil, fmt.Errorf("unknown type %T", obj)
+	klog.V(2).Infof("Unknown type %T", in)
+	return nil, fmt.Errorf("unknown type %T", in)
 }
