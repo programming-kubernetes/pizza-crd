@@ -23,4 +23,14 @@ spec:
         args:
         - --cert-dir=/tmp/certs
         - --secure-port=8443
+        - --tls-cert-file=/var/run/webhook/serving-cert/tls.crt
+        - --tls-private-key-file=/var/run/webhook/serving-cert/tls.key
         - --v=4
+        volumeMounts:
+        - name: serving-cert
+          readOnly: true
+          mountPath: /var/run/webhook/serving-cert
+      volumes:
+      - name: serving-cert
+        secret:
+          secretName: serving-cert
