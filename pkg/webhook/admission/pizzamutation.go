@@ -26,6 +26,7 @@ import (
 	admissionv1beta1 "k8s.io/api/admission/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apiserver/pkg/endpoints/handlers/responsewriters"
+	"k8s.io/klog"
 
 	"github.com/programming-kubernetes/pizza-crd/pkg/apis/restaurant/v1alpha1"
 	"github.com/programming-kubernetes/pizza-crd/pkg/apis/restaurant/v1beta1"
@@ -110,6 +111,8 @@ func ServePizzaAdmit(w http.ResponseWriter, req *http.Request) {
 		responsewriters.WriteObject(http.StatusOK, gvk.GroupVersion(), codecs, review, w, req)
 		return
 	}
+
+	klog.V(2).Infof("Defaulting %s/%s in version %s", review.Request.Namespace, review.Request.Name, gvk)
 
 	// compare original and defaulted version
 	ops, err := jsonpatch.CreatePatch(orig, bs)

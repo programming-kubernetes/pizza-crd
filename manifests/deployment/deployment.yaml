@@ -15,10 +15,11 @@ spec:
       labels:
         webhook: "true"
     spec:
+      serviceAccountName: webhook
       containers:
       - name: webhook
         image: quay.io/programming-kubernetes/pizza-crd
-        imagePullPolicy: Never
+        imagePullPolicy: Always
         command: ["/pizza-crd-webhook"]
         args:
         - --cert-dir=/tmp/certs

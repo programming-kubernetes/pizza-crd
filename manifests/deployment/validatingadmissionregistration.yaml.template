@@ -3,7 +3,10 @@ kind: ValidatingWebhookConfiguration
 metadata:
   name: restaurant.programming-kubernetes.info
 webhooks:
-- name: webhook
+- name: restaurant.programming-kubernetes.info
+  failurePolicy: Fail
+  admissionReviewVersions:
+    - v1beta1
   rules:
   - apiGroups:
     - "restaurant.programming-kubernetes.info"
@@ -13,11 +16,11 @@ webhooks:
     operations:
     - CREATE
     - UPDATE
-    - PATCH
     resources:
     - pizzas
   clientConfig:
     service:
-      namespace: webhook
-      name: pizza-crd
-    caBundle: CA_BUNDLE
+      namespace: pizza-crd
+      name: webhook
+      path: /validate/v1beta1/pizza
+    caBundle: CERT

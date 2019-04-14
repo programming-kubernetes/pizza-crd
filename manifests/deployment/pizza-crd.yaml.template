@@ -21,7 +21,7 @@ spec:
   conversion:
     strategy: Webhook
     webhookClientConfig:
-      caBundle: CA_BUNDLE
+      caBundle: CERT
       service:
         namespace: pizza-crd
         name: webhook

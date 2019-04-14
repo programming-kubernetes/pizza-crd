@@ -1,0 +1,8 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: toppings.restaurant.programming-kubernetes.info-reader
+rules:
+- apiGroups: ["restaurant.programming-kubernetes.info"]
+  resources: ["toppings"]
+  verbs: ["get", "watch", "list"]
