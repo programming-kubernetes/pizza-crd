@@ -9,4 +9,4 @@ spec:
     protocol: TCP
     targetPort: 8443
   selector:
-    apiserver: "true"
+    webhook: "true"
