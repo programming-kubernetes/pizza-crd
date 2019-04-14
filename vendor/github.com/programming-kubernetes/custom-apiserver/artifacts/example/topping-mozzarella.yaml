@@ -1,6 +1,0 @@
-apiVersion: restaurant.programming-kubernetes.info/v1alpha1
-kind: Topping
-metadata:
-  name: mozzarella
-spec:
-  cost: 1.0
