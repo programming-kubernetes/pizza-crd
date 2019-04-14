@@ -18,3 +18,11 @@ spec:
   - name: v1beta1
     served: true
     storage: false
+  conversion:
+    strategy: Webhook
+    webhookClientConfig:
+      service:
+        namespace: pizza-crd
+        name: webhook
+        path: /convert/v1beta1/pizza
+

@@ -81,7 +81,7 @@ func main() {
 
 	// run server
 	mux := http.NewServeMux()
-	mux.Handle("/convert/pizza", http.HandlerFunc(conversion.Serve))
+	mux.Handle("/convert/v1beta1/pizza", http.HandlerFunc(conversion.Serve))
 	if doneCh, err := cfg.SecureServing.Serve(mux, time.Second * 30, server.SetupSignalHandler()); err != nil {
 		panic(err)
 	} else {
