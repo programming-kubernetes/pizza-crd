@@ -108,16 +108,17 @@ func main() {
 		panic(err.Error())
 	}
 
+	stopCh := server.SetupSignalHandler()
+
 	// register handlers
 	restaurantInformers := restaurantinformers.NewSharedInformerFactory(clientset, time.Minute * 5)
 	mux := http.NewServeMux()
 	mux.Handle("/convert/v1beta1/pizza", http.HandlerFunc(conversion.Serve))
 	mux.Handle("/admit/v1beta1/pizza", http.HandlerFunc(admission.ServePizzaAdmit))
 	mux.Handle("/validate/v1beta1/pizza", http.HandlerFunc(admission.ServePizzaValidation(restaurantInformers)))
+	restaurantInformers.Start(stopCh)
 
 	// run server
-	stopCh := server.SetupSignalHandler()
-	restaurantInformers.Start(stopCh)
 	if doneCh, err := cfg.SecureServing.Serve(handlers.LoggingHandler(os.Stdout, mux), time.Second * 30, stopCh); err != nil {
 		panic(err)
 	} else {
