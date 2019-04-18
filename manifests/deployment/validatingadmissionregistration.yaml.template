@@ -7,6 +7,7 @@ webhooks:
   failurePolicy: Fail
   admissionReviewVersions:
     - v1beta1
+    - v1alpha1
   rules:
   - apiGroups:
     - "restaurant.programming-kubernetes.info"
