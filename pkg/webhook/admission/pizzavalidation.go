@@ -45,7 +45,7 @@ func init() {
 	install.Install(scheme)
 }
 
-func ServePizzaValidation(informers restaurantinformers.SharedInformerFactory) func (http.ResponseWriter, *http.Request) {
+func ServePizzaValidation(informers restaurantinformers.SharedInformerFactory) func(http.ResponseWriter, *http.Request) {
 	toppingInformer := informers.Restaurant().V1alpha1().Toppings().Informer()
 	toppingLister := informers.Restaurant().V1alpha1().Toppings().Lister()
 

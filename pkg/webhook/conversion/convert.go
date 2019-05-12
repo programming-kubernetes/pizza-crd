@@ -35,7 +35,7 @@ func convert(in runtime.Object, apiVersion string) (runtime.Object, error) {
 		klog.V(2).Infof("Converting %s/%s from %s to %s", in.Namespace, in.Name, v1alpha1.SchemeGroupVersion, apiVersion)
 
 		out := &v1beta1.Pizza{
-			TypeMeta: in.TypeMeta,
+			TypeMeta:   in.TypeMeta,
 			ObjectMeta: in.ObjectMeta,
 			Status: v1beta1.PizzaStatus{
 				Cost: in.Status.Cost,
@@ -51,7 +51,7 @@ func convert(in runtime.Object, apiVersion string) (runtime.Object, error) {
 			}
 			idx[top] = len(out.Spec.Toppings)
 			out.Spec.Toppings = append(out.Spec.Toppings, v1beta1.PizzaTopping{
-				Name: top,
+				Name:     top,
 				Quantity: 1,
 			})
 		}
@@ -65,7 +65,7 @@ func convert(in runtime.Object, apiVersion string) (runtime.Object, error) {
 		klog.V(2).Infof("Converting %s/%s from %s to %s", in.Namespace, in.Name, v1alpha1.SchemeGroupVersion, apiVersion)
 
 		out := &v1alpha1.Pizza{
-			TypeMeta: in.TypeMeta,
+			TypeMeta:   in.TypeMeta,
 			ObjectMeta: in.ObjectMeta,
 			Status: v1alpha1.PizzaStatus{
 				Cost: in.Status.Cost,

@@ -69,7 +69,7 @@ func Serve(w http.ResponseWriter, req *http.Request) {
 	// convert objects
 	review.Response = &apiextensionsv1beta1.ConversionResponse{
 		UID: review.Request.UID,
-		Result:  metav1.Status{
+		Result: metav1.Status{
 			Status: metav1.StatusSuccess,
 		},
 	}

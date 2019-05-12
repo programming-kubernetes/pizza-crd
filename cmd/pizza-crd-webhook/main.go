@@ -22,13 +22,13 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/gorilla/handlers"
 	"github.com/spf13/pflag"
 	"k8s.io/apiserver/pkg/server"
 	"k8s.io/apiserver/pkg/server/options"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/component-base/cli/globalflag"
-	"github.com/gorilla/handlers"
 
 	"github.com/programming-kubernetes/pizza-crd/pkg/generated/clientset/versioned"
 	restaurantinformers "github.com/programming-kubernetes/pizza-crd/pkg/generated/informers/externalversions"
@@ -90,12 +90,12 @@ func main() {
 	config, err := rest.InClusterConfig()
 	if err != nil {
 		// fallback to home directory
-		home, err :=os.UserHomeDir()
+		home, err := os.UserHomeDir()
 		if err != nil {
 			panic(err)
 		}
 		kubeconfig := filepath.Join(home, ".kube", "config")
-		if envvar := os.Getenv("KUBECONFIG"); len(envvar) >0 {
+		if envvar := os.Getenv("KUBECONFIG"); len(envvar) > 0 {
 			kubeconfig = envvar
 		}
 		config, err = clientcmd.BuildConfigFromFlags("", kubeconfig)
@@ -111,7 +111,7 @@ func main() {
 	stopCh := server.SetupSignalHandler()
 
 	// register handlers
-	restaurantInformers := restaurantinformers.NewSharedInformerFactory(clientset, time.Minute * 5)
+	restaurantInformers := restaurantinformers.NewSharedInformerFactory(clientset, time.Minute*5)
 	mux := http.NewServeMux()
 	mux.Handle("/convert/v1beta1/pizza", http.HandlerFunc(conversion.Serve))
 	mux.Handle("/admit/v1beta1/pizza", http.HandlerFunc(admission.ServePizzaAdmit))
@@ -119,7 +119,7 @@ func main() {
 	restaurantInformers.Start(stopCh)
 
 	// run server
-	if doneCh, err := cfg.SecureServing.Serve(handlers.LoggingHandler(os.Stdout, mux), time.Second * 30, stopCh); err != nil {
+	if doneCh, err := cfg.SecureServing.Serve(handlers.LoggingHandler(os.Stdout, mux), time.Second*30, stopCh); err != nil {
 		panic(err)
 	} else {
 		<-doneCh
