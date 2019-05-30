@@ -59,7 +59,7 @@ func convert(in runtime.Object, apiVersion string) (runtime.Object, error) {
 		return out, nil
 
 	case *v1beta1.Pizza:
-		if apiVersion != v1beta1.SchemeGroupVersion.String() {
+		if apiVersion != v1alpha1.SchemeGroupVersion.String() {
 			return nil, fmt.Errorf("cannot convert %s to %s", v1beta1.SchemeGroupVersion, apiVersion)
 		}
 		klog.V(2).Infof("Converting %s/%s from %s to %s", in.Namespace, in.Name, v1alpha1.SchemeGroupVersion, apiVersion)
