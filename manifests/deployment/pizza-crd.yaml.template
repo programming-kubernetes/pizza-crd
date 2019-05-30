@@ -15,9 +15,50 @@ spec:
   - name: v1alpha1
     served: true
     storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              toppings:
+                type: array
+                items:
+                  type: string
+          status:
+            type: object
+            properties:
+              cost:
+                type: number
+        required:
+        - spec
   - name: v1beta1
     served: true
     storage: false
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              toppings:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    quantity:
+                      type: integer
+                      minimum: 1
+          status:
+            type: object
+            properties:
+              cost:
+                type: number
+  preserveUnknownFields: false
   conversion:
     strategy: Webhook
     webhookClientConfig:
@@ -26,4 +67,3 @@ spec:
         namespace: pizza-crd
         name: webhook
         path: /convert/v1beta1/pizza
-
