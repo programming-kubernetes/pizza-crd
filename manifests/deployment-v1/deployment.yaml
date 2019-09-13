@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pizza-crd-webhook
+  namespace: pizza-crd
+  labels:
+    webhook: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      webhook: "true"
+  template:
+    metadata:
+      labels:
+        webhook: "true"
+    spec:
+      serviceAccountName: webhook
+      containers:
+      - name: webhook
+        image: quay.io/programming-kubernetes/pizza-crd
+        imagePullPolicy: Always
+        command: ["/pizza-crd-webhook"]
+        args:
+        - --cert-dir=/tmp/certs
+        - --secure-port=8443
+        - --tls-cert-file=/var/run/webhook/serving-cert/tls.crt
+        - --tls-private-key-file=/var/run/webhook/serving-cert/tls.key
+        - --v=4
+        volumeMounts:
+        - name: serving-cert
+          readOnly: true
+          mountPath: /var/run/webhook/serving-cert
+      volumes:
+      - name: serving-cert
+        secret:
+          secretName: serving-cert

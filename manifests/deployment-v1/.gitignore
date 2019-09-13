@@ -1,0 +1,6 @@
+tls.crt
+tls.key
+pizza-crd.yaml
+serving-cert-secret.yaml
+mutatingadmissionregistration.yaml
+validatingadmissionregistration.yaml
