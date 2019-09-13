@@ -1,0 +1,28 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: restaurant.programming-kubernetes.info
+webhooks:
+- name: restaurant.programming-kubernetes.info
+  failurePolicy: Fail
+  sideEffects: None
+  admissionReviewVersions:
+  - v1beta1
+  - v1alpha1
+  rules:
+  - apiGroups:
+    - "restaurant.programming-kubernetes.info"
+    apiVersions:
+    - v1alpha1
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - pizzas
+  clientConfig:
+    service:
+      namespace: pizza-crd
+      name: webhook
+      path: /admit/v1beta1/pizza
+    caBundle: CERT
